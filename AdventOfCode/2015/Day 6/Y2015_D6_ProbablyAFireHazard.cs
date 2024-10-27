@@ -1,33 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.IO;
+using AdventOfCode.Helpers;
+using AdventOfCode.Model;
 namespace AdventOfCode._2015.Day_6
 {
     internal class Y2015_D6_ProbablyAFireHazard : IChallenge
     {
 
-        public void Run()
+        public void Run(DayAndYear dayAndYear)
         {
             string fileName = "input.txt";
-            string dir = "C:\\Users\\d.schoon\\source\\repos\\AdventOfCode\\AdventOfCode\\2015\\Day6";
-            string path = dir + "\\" + fileName;
 
-            //var start = Stopwatch.StartNew();
-            //Part1 part1 = new Part1(1000, path);
-            //part1.Execute();
+            GetFilePath fileBuilder = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            string filePath = fileBuilder.GetPath();
 
-            Part2 part2 = new Part2(1000, path);
+            Part1 part1 = new Part1(1000, filePath);
+            var clock = Stopwatch.StartNew();
+            part1.Execute();
+            clock.Stop();
+            Console.WriteLine($"Elapsed time Part 1: {clock.ElapsedMilliseconds / 1000.0} seconds");
+
+            Part2 part2 = new Part2(1000, filePath);
+            clock.Restart();
             part2.Execute();
-            //Console.WriteLine($"Elapsed time: {start.ElapsedMilliseconds / 1000.0} seconds");
+            clock.Stop();
+            Console.WriteLine($"Elapsed time Part 2: {clock.ElapsedMilliseconds / 1000.0} seconds");
         }
     }
 

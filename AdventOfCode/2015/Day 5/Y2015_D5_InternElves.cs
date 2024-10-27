@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventOfCode.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace AdventOfCode._2015.Day_5
     internal class Y2015_D5_InternElves : IChallenge
     {
 
-        public void Run()
+        public void Run(DayAndYear dayAndYear)
         {
             Part1();
             Part2();

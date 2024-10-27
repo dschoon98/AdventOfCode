@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventOfCode.Model;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -6,7 +7,7 @@ namespace AdventOfCode._2015.Day_4
 {
     public class Y2015_D4_IdealStockingOffer : IChallenge
     {
-        public void Run()
+        public void Run(DayAndYear dayAndYear)
         {
             
             string input = "ckczppom";
