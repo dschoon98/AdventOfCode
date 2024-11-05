@@ -144,25 +144,5 @@ namespace AdventOfCode._2015.Day_7
                 return lines.ToArray();
             }
         }
-
-        public int[] Convert2Binary(int dec)
-        {
-            int[] output = new int[16];
-            int remainder = dec;
-            for (int i = 0; i < 16; i++)
-            {
-                var check = Math.Pow(2, 15 - i) <= remainder;
-                if (Math.Pow(2, 15 - i) <= remainder)
-                {
-                    remainder -= (int)Math.Pow(2, 15 - i);
-                    output[i] = 1;
-                }
-                if (remainder == 0)
-                {
-                    break;
-                }
-            }
-            return output;
-        }
     }
 }
