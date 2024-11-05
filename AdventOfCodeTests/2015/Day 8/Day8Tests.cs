@@ -32,7 +32,7 @@ namespace AdventOfCode._2015.Day_8.Tests
             // Arrange
             string[] input = { "ab\"cd" };
 
-            // Act
+            // Actø
             Part1 part1 = new Part1(input);
             int actualResult = part1.CountMemoryCharacters(input[0]);
 

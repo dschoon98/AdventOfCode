@@ -109,6 +109,7 @@ namespace AdventOfCode._2015.Day_7.Tests
             LoopOverLines loopOverLines = new LoopOverLines(wiresDict, lineInput);
             loopOverLines.ExecuteLoop();
 
+
             // Assert
             int expectedResult = 96;
             var outputDictionary = loopOverLines._wiresDict;

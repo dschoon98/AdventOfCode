@@ -19,6 +19,7 @@ namespace AdventOfCode._2015.Day_7
         public void Run(DayAndYear dayAndYear)
         {
             string fileName = "input.txt";
+            //string fileName = "sample.txt";
             GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
             string path = file.GetPath();
 
@@ -41,7 +42,7 @@ namespace AdventOfCode._2015.Day_7
         {
             string[] lines = File.ReadAllLines(_path);
             //var wiresDict = GetStartingWires(lines);
-            
+
             var sortedLines = SortList(lines);
             LoopOverLines loopOverLines = new LoopOverLines(_wiresDict, sortedLines);
             _wiresDict = loopOverLines.ExecuteLoop();
@@ -64,13 +65,13 @@ namespace AdventOfCode._2015.Day_7
                     Console.WriteLine($"PERFORMING: {_sortedLines[i]}");
                     PerformBitwiseOperation(_sortedLines[i]);
                 }
-                return _wiresDict.OrderBy(x=>x.Key).ToDictionary();
+                return _wiresDict.OrderBy(x => x.Key).ToDictionary();
             }
             public void PerformBitwiseOperation(string line)
             {
-                if(line == "lx -> a" ||  line == "ly OR lz -> ma")
+                if (line == "lx -> a" || line == "ly OR lz -> ma")
                 {
-                    
+
                 }
                 string key = line.Split("->").Last().Trim();
                 string[] linesArray = line.Split(" ");
@@ -81,7 +82,7 @@ namespace AdventOfCode._2015.Day_7
                         if (ushort.TryParse(linesArray[0], out ushort result))
                         {
                             _wiresDict[key] = result;
-                            Console.WriteLine($"{key} = {_wiresDict[key]}"); 
+                            Console.WriteLine($"{key} = {_wiresDict[key]}");
                             break;
                         }
                         _wiresDict[key] = _wiresDict[linesArray[0]];
@@ -121,13 +122,13 @@ namespace AdventOfCode._2015.Day_7
                 }
             }
         }
-        
+
         public string[] SortList(IEnumerable<string> lines)
         {
             try
             {
-                var firstLines = lines.Select(x => x).Where(x=>int.TryParse(x.Split("->").First().Trim(),out _) && x.Split(" ")[1] == "->");
-                var restLines = lines.Select(x=>x).Where(x => !(int.TryParse(x.Split("->").First().Trim(), out _) && x.Split(" ")[1] == "->"));
+                var firstLines = lines.Select(x => x).Where(x => int.TryParse(x.Split("->").First().Trim(), out _) && x.Split(" ")[1] == "->");
+                var restLines = lines.Select(x => x).Where(x => !(int.TryParse(x.Split("->").First().Trim(), out _) && x.Split(" ")[1] == "->"));
 
                 var sortedRestLines = restLines.OrderBy(x =>
                 x.Split("->").Last().Trim())
