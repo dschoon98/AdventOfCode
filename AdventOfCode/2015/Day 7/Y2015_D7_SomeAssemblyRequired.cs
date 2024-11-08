@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,125 +25,108 @@ namespace AdventOfCode._2015.Day_7
             string path = file.GetPath();
 
             Part1 part1 = new Part1(path);
-            part1.Execute();
-            var dictOutput = part1._wiresDict;
-            Console.WriteLine($"Value: {dictOutput["lx"]}");
+            int result1 = part1.Execute();
+
+            Part2 part2 = new Part2(path);
+            int result2 = part2.Execute();
+            Console.WriteLine($"Result for part 1: {result1}\n" +
+                $"Result for part 2: {result2}");
         }
     }
     public class Part1
     {
-        string _path;
-        public Dictionary<string, ushort> _wiresDict = new Dictionary<string, ushort>();
+        public List<string> _operations = new List<string>();
+        public List<string> _targets = new List<string>();
+        public string _path;
+        public Dictionary<string, int> _wiresDict = new Dictionary<string, int>();
+
         public Part1(string path)
         {
             _path = path;
         }
 
-        public void Execute()
+        public virtual int Execute()
         {
             string[] lines = File.ReadAllLines(_path);
-            //var wiresDict = GetStartingWires(lines);
-
-            var sortedLines = SortList(lines);
-            LoopOverLines loopOverLines = new LoopOverLines(_wiresDict, sortedLines);
-            _wiresDict = loopOverLines.ExecuteLoop();
+            foreach (string line in lines)
+            {
+                _operations.Add(line.Split("->").First().Trim());
+                _targets.Add(line.Split("->").Last().Trim());
+            }
+            return Calculate("a");
         }
-        public class LoopOverLines
+
+
+        public virtual int Calculate(string target)
         {
-            public Dictionary<string, ushort> _wiresDict { get; }
-            private string[] _sortedLines;
-            public LoopOverLines(Dictionary<string, ushort> wiresDict, string[] sortedLines)
+            int i = _targets.IndexOf(target);
+            int result = new();
+            if (!_wiresDict.ContainsKey(target))
             {
-                _wiresDict = wiresDict;
-                _sortedLines = sortedLines;
-            }
-            public Dictionary<string, ushort> ExecuteLoop()
-            {
-                _wiresDict[_sortedLines[0].Split(" ").Last().Trim()] = 0;
-
-                for (int i = 0; i < _sortedLines.Length; i++)
+                if (int.TryParse(target, out int value))
                 {
-                    Console.WriteLine($"PERFORMING: {_sortedLines[i]}");
-                    PerformBitwiseOperation(_sortedLines[i]);
+                    return value;
                 }
-                return _wiresDict.OrderBy(x => x.Key).ToDictionary();
-            }
-            public void PerformBitwiseOperation(string line)
-            {
-                if (line == "lx -> a" || line == "ly OR lz -> ma")
+                string[] operationArray = _operations[i].Split(" ");
+                if (operationArray.Length < 2)
                 {
-
+                    result = Calculate(operationArray[0]);
                 }
-                string key = line.Split("->").Last().Trim();
-                string[] linesArray = line.Split(" ");
-                int length = linesArray.Length;
-                switch (length)
+                else
                 {
-                    case 3: // "value -> wire" OR "wire -> wire"
-                        if (ushort.TryParse(linesArray[0], out ushort result))
-                        {
-                            _wiresDict[key] = result;
-                            Console.WriteLine($"{key} = {_wiresDict[key]}");
+                    string? op = operationArray.Reverse().ToList()[1];
+                    switch (op)
+                    {
+                        case "NOT":
+                            result = ~Calculate(operationArray[1]);
+                            _wiresDict[target] = result;
                             break;
-                        }
-                        _wiresDict[key] = _wiresDict[linesArray[0]];
-                        Console.WriteLine($"{key} = {_wiresDict[key]}");
-                        break;
-                    case 4: // "NOT wire -> wire"
-                        _wiresDict[key] = (ushort)~_wiresDict[linesArray[1]];
-                        Console.WriteLine($"{key} = {_wiresDict[key]}");
-                        break;
-                    case 5: // "wire OPERATION wire -> wire"
-                        string operation = linesArray[1];
-                        ushort elementInt, firstElement, secondElement;
-                        switch (operation)
-                        {
-                            case "RSHIFT":
-                                _wiresDict[key] = (ushort)(_wiresDict[linesArray[0]] >> ushort.Parse(linesArray[2]));
-                                Console.WriteLine($"{key} = {_wiresDict[key]}");
-                                break;
-                            case "LSHIFT":
-                                _wiresDict[key] = (ushort)(_wiresDict[linesArray[0]] << ushort.Parse(linesArray[2]));
-                                Console.WriteLine($"{key} = {_wiresDict[key]}");
-                                break;
-                            case "AND":
-                                firstElement = ushort.TryParse(linesArray[0], out elementInt) ? elementInt : _wiresDict[linesArray[0]];
-                                secondElement = ushort.TryParse(linesArray[0], out elementInt) ? elementInt : _wiresDict[linesArray[2]];
-                                _wiresDict[key] = (ushort)(firstElement & secondElement);
-                                Console.WriteLine($"{key} = {_wiresDict[key]}");
-                                break;
-                            case "OR":
-                                firstElement = ushort.TryParse(linesArray[0], out elementInt) ? elementInt : _wiresDict[linesArray[0]];
-                                secondElement = ushort.TryParse(linesArray[0], out elementInt) ? elementInt : _wiresDict[linesArray[2]];
-                                _wiresDict[key] = (ushort)(firstElement | secondElement);
-                                Console.WriteLine($"{key} = {_wiresDict[key]}");
-                                break;
-                        }
-                        break;
+                        case "RSHIFT":
+                            result = Calculate(operationArray[0]) >> Calculate(operationArray[2]);
+                            _wiresDict[target] = result;
+                            break;
+                        case "LSHIFT":
+                            result = Calculate(operationArray[0]) << Calculate(operationArray[2]);
+                            _wiresDict[target] = result;
+                            break;
+                        case "AND":
+                            result = Calculate(operationArray[0]) & Calculate(operationArray[2]);
+                            _wiresDict[target] = result;
+                            break;
+                        case "OR":
+                            result = Calculate(operationArray[0]) | Calculate(operationArray[2]);
+                            _wiresDict[target] = result;
+                            break;
+                    }
                 }
+                return result;
             }
-        }
-
-        public string[] SortList(IEnumerable<string> lines)
-        {
-            try
+            else
             {
-                var firstLines = lines.Select(x => x).Where(x => int.TryParse(x.Split("->").First().Trim(), out _) && x.Split(" ")[1] == "->");
-                var restLines = lines.Select(x => x).Where(x => !(int.TryParse(x.Split("->").First().Trim(), out _) && x.Split(" ")[1] == "->"));
-
-                var sortedRestLines = restLines.OrderBy(x =>
-                x.Split("->").Last().Trim())
-                    .OrderBy(x =>
-                x.Split("->").Last().Length)
-                .ToArray();
-                sortedRestLines = sortedRestLines.Skip(1).Concat(sortedRestLines.Take(1)).ToArray();
-                return firstLines.Concat(sortedRestLines).ToArray();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred during sorting: " + ex.Message);
-                return lines.ToArray();
+                return _wiresDict[target];
             }
         }
     }
+    public class Part2 : Part1
+    {
+        public Part2(string path) : base(path) { }
+
+        public override int Execute()
+        {
+            int result1 = base.Execute();
+            _wiresDict.Clear();
+            _wiresDict["b"] = result1;
+            return Calculate("a");
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
