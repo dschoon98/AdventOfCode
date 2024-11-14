@@ -1,16 +1,8 @@
 ﻿using AdventOfCode.Helpers;
 using AdventOfCode.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.JavaScript;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AdventOfCode._2015.Day_12
 {
@@ -18,8 +10,8 @@ namespace AdventOfCode._2015.Day_12
     {
         public void Run(DayAndYear dayAndYear)
         {
-            //string fileName = "input.txt";
-            string fileName = "sample.txt";
+            string fileName = "input.txt";
+            //string fileName = "sample.txt";
             GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
             string path = file.GetPath();
 
@@ -62,46 +54,44 @@ namespace AdventOfCode._2015.Day_12
         }
         public void Execute()
         {
-            var jsonObject = JsonObject.Parse(_lines);
-            var jsonArray = JsonSerializer.Deserialize<JsonArray>(_lines);
-            CheckJsonElement(jsonArray, 0);
+            var jsonDocument = JsonDocument.Parse(_lines);
+            JsonElement jsonElement = jsonDocument.RootElement;
+            int count = 0;
+            int result = CheckJsonElement(jsonElement, count);
+            Console.WriteLine(result);
         }
 
-        public int CheckJsonElement<T>(T jsonElement, int count)
+        public int CheckJsonElement(JsonElement jsonElement, int count)
         {
-            var x = jsonElement.GetType().Name;
-            var b = typeof(T);
-            if (jsonElement is int jsonInt)
+            if (jsonElement.ValueKind == JsonValueKind.Object)
             {
-                return jsonInt;
-            }
-            else if (jsonElement is JsonArray jsonArray)
-            {
-                foreach (object? jsonArrayElement in jsonArray)
+                foreach (var node in jsonElement.EnumerateObject())
                 {
-                    count += CheckJsonElement(jsonArrayElement, count);
+                    if (node.Value.ToString() == "red")
+                    {
+                        return 0;
+                    }
+                    count += CheckJsonElement(node.Value, 0);
                 }
                 return count;
             }
-            else if (jsonElement is JsonObject jsonObject)
+            if (jsonElement.ValueKind == JsonValueKind.Array)
             {
-                if (jsonObject.ContainsKey("red"))
+                foreach (var node in jsonElement.EnumerateArray())
                 {
-                    return 0;
+                    count += CheckJsonElement(node, 0);
                 }
-                else
-                {
-                    foreach (object? jsonObjectElement in jsonObject)
-                    {
-                        count += CheckJsonElement(jsonObjectElement, count);
-                    }
-                    return count;
-                }
+                return count;
             }
-            else
+            if (jsonElement.ValueKind == JsonValueKind.Number)
+            {
+                return (int)jsonElement.GetSingle();
+            }
+            if (jsonElement.ValueKind == JsonValueKind.String)
             {
                 return 0;
             }
+            throw new ArgumentException("Unknown data type in Json node.");
         }
     }
 }

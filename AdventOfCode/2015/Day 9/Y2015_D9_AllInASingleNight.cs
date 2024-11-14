@@ -27,17 +27,54 @@ namespace AdventOfCode._2015.Day_9
             //Part1 part1 = new Part1(path);
             //part1.Execute();
 
+            IPuzzleInput p1 = new FilePuzzleInput(path);
+            IPuzzleInput p2 = new ApiPuzzleInput("http;l...");
+
+            Part1 part1 = new Part1(p2);
+
+
             Part2 part2 = new Part2(path);
             part2.Execute();
 
         }
     }
-    public class Part1
+    public class FilePuzzleInput : IPuzzleInput
+    {
+        public string[] GetInput()
+        {
+            return File.ReadAllLines(_path);
+        }
+        private readonly string _path;
+        public FilePuzzleInput(string path)
+        {
+            _path = path;
+        }
+    }
+
+    public class ApiPuzzleInput : IPuzzleInput
+    {
+        public string[] GetInput()
+        {
+            return File.ReadAllLines(_url);
+        }
+        private readonly string _url;
+        public ApiPuzzleInput(string url)
+        {
+            _url = url;
+        }
+    }
+
+    public interface IPuzzleInput
+    {
+        public string[] GetInput();
+    }
+
+    public class Part1 
     {
         public readonly string[] _lines;
-        public Part1(string path)
+        public Part1(IPuzzleInput path)
         {
-            _lines = File.ReadAllLines(path);
+            _lines = path.GetInput();
         }
         public void Execute()
         {
