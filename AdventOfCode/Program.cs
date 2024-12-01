@@ -12,6 +12,7 @@ namespace AdventOfCode
             {
                 Console.WriteLine("Select a year:");
                 Console.WriteLine("2015");
+                Console.WriteLine("2024");
                 Console.WriteLine("0. Exit");
                 Console.Write("Enter your choice: ");
 
