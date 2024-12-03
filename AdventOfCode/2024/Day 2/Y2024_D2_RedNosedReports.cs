@@ -113,7 +113,6 @@ namespace AdventOfCode._2024.Day_2
         }
         public bool DetermineIfSafe(int[] reportArray, int recursionDepth, int maxRecursion)
         {
-            bool safe = true;
             bool reportIsAscending = ReportIsAscending(reportArray);
             bool failed = false;
             for (int i = 1; i < reportArray.Length; i++)
@@ -133,31 +132,22 @@ namespace AdventOfCode._2024.Day_2
                 {
                     if (recursionDepth == maxRecursion)
                     {
-                        return false; // if(failed) --> return safe = false; else if NOT failed --> return safe = true;
+                        return false;
                     }
                     var reportArrayRemovePrev = RemoveAtIndex(reportArray, i - 1);
                     var removePrevBecomesSafe = DetermineIfSafe(reportArrayRemovePrev, recursionDepth + 1, maxRecursion);
 
-                    int[] reportArrayRemoveCurr;
-                    var removeCurrBecomesSafe = false;
-                    if (!removePrevBecomesSafe)
+                    if (removePrevBecomesSafe) { return true; }
+                    else
                     {
-                        reportArrayRemoveCurr = RemoveAtIndex(reportArray, i);
-                        removeCurrBecomesSafe = DetermineIfSafe(reportArrayRemoveCurr, recursionDepth + 1, maxRecursion);
+                        var reportArrayRemoveCurr = RemoveAtIndex(reportArray, i);
+                        var removeCurrBecomesSafe = DetermineIfSafe(reportArrayRemoveCurr, recursionDepth + 1, maxRecursion);
                         if (removeCurrBecomesSafe) { return true; }
                     }
-                    else // removePrevBecomesSafe == true
-                    {
-                        return true;
-                    }
-                    if (!removePrevBecomesSafe && !removeCurrBecomesSafe)
-                    {
-                        safe = false;
-                        break;
-                    }
+                    return false;
                 }
             }
-            return safe;
+            return true;
         }
     }
 }
