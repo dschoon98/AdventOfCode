@@ -22,7 +22,7 @@ public class Part1
 {
     private string[] _lines { get; set; }
     private int _eggnoggAmount { get; }
-    public List<List<int>> _storePermutations { get; set; } = new List<List<int>>();
+    public List<List<int>> StorePermutations { get; set; } = new List<List<int>>();
     public Part1(string path, int eggnoggAmount)
     {
         _lines = File.ReadAllLines(path);
@@ -32,9 +32,9 @@ public class Part1
     {
         var containers = GetContainers();
         FindCombinations(containers, _eggnoggAmount, 0, new List<int>());
-        Console.WriteLine($"Result of part 1: {_storePermutations.Count}");
+        Console.WriteLine($"Result of part 1: {StorePermutations.Count}");
 
-        var groupedByLength = _storePermutations.GroupBy(g => g.Count);
+        var groupedByLength = StorePermutations.GroupBy(g => g.Count);
         int countOfMinimumContainers = groupedByLength.OrderBy(x=>x.Count()).First().Count();
         Console.WriteLine($"Result of part 2: {countOfMinimumContainers}");
     }
@@ -46,7 +46,7 @@ public class Part1
     {
         if (target == 0)
         {
-            _storePermutations.Add(new List<int>(combination));
+            StorePermutations.Add(new List<int>(combination));
             return;
         }
         for (int i = start; i < containers.Length; i++)
