@@ -51,7 +51,7 @@ namespace AdventOfCode._2024.Day_2
                 if (safe == 1) { }
                 safeTotal += safe;
             }
-            Console.WriteLine(safeTotal);
+            Console.WriteLine($"Part 1: {safeTotal}");
         }
         public int EitherIncreasingOrDecreasing(string[] reportArray)
         {
