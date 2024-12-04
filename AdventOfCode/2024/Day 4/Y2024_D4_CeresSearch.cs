@@ -1,6 +1,5 @@
 ﻿using AdventOfCode.Helpers;
 using AdventOfCode.Model;
-using Google.OrTools.LinearSolver;
 
 namespace AdventOfCode._2024.Day_4;
 
@@ -135,7 +134,7 @@ public class Part2(string path) : Part1(path)
                             var CoLetterIndices = FindCoLetters(i, j);
                             if (CoLetterIndices.Count > 0)
                             {
-                                int iOppositeLetter = i + direction[0] * (_target.Length-1); int jOppositeLetter = j + direction[1] * (_target.Length - 1);
+                                int iOppositeLetter = i + direction[0] * (_target.Length - 1); int jOppositeLetter = j + direction[1] * (_target.Length - 1);
                                 foreach (var coLetter in CoLetterIndices)
                                 {
                                     var coLetterIsCorrect = false;
@@ -143,7 +142,7 @@ public class Part2(string path) : Part1(path)
                                     /// (x_i - x)^2 + (y_i - y)^2 = radius^2
                                     /// The coletter is on the radius around the letter opposite to the M (which is the S in this case)
                                     /// radius magnitude = target.Length - 1
-                                    if (Math.Pow((iOppositeLetter - coLetter[0]), 2) + Math.Pow((jOppositeLetter - coLetter[1]), 2) == Math.Pow((_target.Length - 1), 2)) 
+                                    if (Math.Pow((iOppositeLetter - coLetter[0]), 2) + Math.Pow((jOppositeLetter - coLetter[1]), 2) == Math.Pow((_target.Length - 1), 2))
                                     {
                                         // Set direction of the word of the mirror letter
                                         var directionColetter = coLetter[0] == i ? new List<int> { direction[0], (j - coLetter[1]) / 2 } : new List<int> { (i - coLetter[0]) / 2, direction[1] };
