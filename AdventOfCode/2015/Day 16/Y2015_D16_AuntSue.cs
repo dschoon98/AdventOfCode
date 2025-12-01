@@ -14,7 +14,7 @@ namespace AdventOfCode._2015.Day_16
         public void Run(DayAndYear dayAndYear)
         {
             string fileName = "input.txt";
-            GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string path = file.GetPath();
 
             string input = "children: 3\r\ncats: 7\r\nsamoyeds: 2\r\npomeranians: 3\r\nakitas: 0\r\nvizslas: 0\r\ngoldfish: 5\r\ntrees: 3\r\ncars: 2\r\nperfumes: 1";

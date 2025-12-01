@@ -12,7 +12,7 @@ namespace AdventOfCode._2015.Day_6
         {
             string fileName = "input.txt";
 
-            GetFilePath fileBuilder = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath fileBuilder = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string filePath = fileBuilder.GetPath();
 
             Part1 part1 = new Part1(1000, filePath);

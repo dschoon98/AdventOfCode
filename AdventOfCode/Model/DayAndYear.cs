@@ -2,7 +2,7 @@
 {
     public class DayAndYear
     {
-        public string? day {  get; set; }
-        public string? year { get; set; }
+        public required string Day {  get; set; }
+        public required string Year { get; set; }
     }
 }

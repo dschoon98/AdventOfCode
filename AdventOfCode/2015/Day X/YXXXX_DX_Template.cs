@@ -8,7 +8,7 @@ namespace AdventOfCode._2015.Day_0
         public void Run(DayAndYear dayAndYear)
         {
             string fileName = "input.txt";
-            GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string path = file.GetPath();
 
             Part1 part1 = new Part1(path);

@@ -9,7 +9,7 @@ namespace AdventOfCode._2015.OLD
         {
             //string fileName = "input.txt";
             string fileName = "sample.txt";
-            GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string path = file.GetPath();
 
             int eggnoggAmount = 7;

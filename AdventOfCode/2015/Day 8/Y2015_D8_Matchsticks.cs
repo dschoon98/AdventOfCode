@@ -15,7 +15,7 @@ namespace AdventOfCode._2015.Day_8
             string fileName = "sample.txt";
             //string fileName = "input.txt";
 
-            GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string path = file.GetPath();
             string[] lines = File.ReadAllLines(path);
 

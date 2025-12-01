@@ -10,7 +10,7 @@ internal class Y2015_D17_NoSuchThingAsTooMuch : IChallenge
     {
         string fileName = "input.txt";
         //string fileName = "sample.txt";
-        GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+        GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
         string path = file.GetPath();
 
         int eggnoggAmount = 150;
@@ -31,16 +31,16 @@ public class Part1
     public void Execute()
     {
         var containers = GetContainers();
-        FindCombinations(containers, _eggnoggAmount, 0, new List<int>());
+        FindCombinations(containers, _eggnoggAmount, 0, []);
         Console.WriteLine($"Result of part 1: {StorePermutations.Count}");
 
         var groupedByLength = StorePermutations.GroupBy(g => g.Count);
-        int countOfMinimumContainers = groupedByLength.OrderBy(x=>x.Count()).First().Count();
+        int countOfMinimumContainers = groupedByLength.OrderBy(x => x.Count()).First().Count();
         Console.WriteLine($"Result of part 2: {countOfMinimumContainers}");
     }
     private void FindCombinations(
-        int[] containers, 
-        int target, 
+        int[] containers,
+        int target,
         int start,
         List<int> combination)
     {

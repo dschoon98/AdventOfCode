@@ -10,14 +10,14 @@ namespace AdventOfCode._2024.Day_3
         {
             string fileName = "input.txt";
             //string fileName = "sample.txt";
-            GetFilePath file = new GetFilePath(fileName, dayAndYear.day, dayAndYear.year);
+            GetFilePath file = new GetFilePath(fileName, dayAndYear.Day, dayAndYear.Year);
             string path = file.GetPath();
 
             Part1 part1 = new Part1(path);
             part1.Execute();
         }
     }
-    public class Part1
+    public partial class Part1
     {
         private readonly string _lines;
         public Part1(string path)
@@ -43,9 +43,9 @@ namespace AdventOfCode._2024.Day_3
             }
             Console.WriteLine($"Result of part 2: {count - countDisabled}");
         }
-        public int CountMulInstructions(string input)
+        private static int CountMulInstructions(string input)
         {
-            var matches = Regex.Matches(input, @"mul\((\d{1,3}),(\d{1,3})\)");
+            var matches = Whatever().Matches(input);
             int start = 0;
             foreach (Match match in matches)
             {
@@ -55,6 +55,9 @@ namespace AdventOfCode._2024.Day_3
             }
             return start;
         }
+
+        [GeneratedRegex(@"mul\((\d{1,3}),(\d{1,3})\)")]
+        private static partial Regex Whatever();
     }
 
 }

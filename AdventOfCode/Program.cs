@@ -13,6 +13,7 @@ namespace AdventOfCode
                 Console.WriteLine("Select a year:");
                 Console.WriteLine("2015");
                 Console.WriteLine("2024");
+                Console.WriteLine("2025");
                 Console.WriteLine("0. Exit");
                 Console.Write("Enter your choice: ");
 
@@ -45,7 +46,7 @@ namespace AdventOfCode
                     Console.WriteLine($"Could not create an instance of {type.FullName}.");
                     return;
                 }
-                DayAndYear dayAndYear = new DayAndYear { day = day, year = year };
+                DayAndYear dayAndYear = new DayAndYear { Day = day, Year = year };
                 instance.Run(dayAndYear);
 
                 Environment.Exit(0); return;
