@@ -86,43 +86,51 @@ public class Y2025_D1_SecretEntrance : IChallenge
 
         public int Move(int resultant, char direction, int distance)
         {
-            int total;
+            int zeroCrossings;
             if (direction == 'L')
             {
-                var zeroCorrection = resultant == 0 ? 1 : 0;
-                // move down
-                total = resultant - distance;
-                if (total > 0) // nothing crossed
-                    return total;
-                total = Math.Abs(total);
-                if (total == 0)
+                var fullCircles = distance / 100;
+                var rest = distance % 100;
+                zeroCrossings = fullCircles;
+                var newRawResultant = resultant - rest;
+                if (newRawResultant < 0)
                 {
-                    _zeroCrossings++;
-                    return 0;
+                    if (resultant != 0)
+                        zeroCrossings++;
+                    resultant = 100 - Math.Abs(newRawResultant);
+                }
+                else if (newRawResultant == 0)
+                {
+                    zeroCrossings++;
+                    resultant = 0;
                 }
                 else
                 {
-                    _zeroCrossings += (int)Math.Ceiling((total / 100d)) - zeroCorrection;
-                    resultant = 100 - (total % 100);
-                    return resultant;
+                    resultant = newRawResultant;
                 }
             }
             else if (direction == 'R')
             {
-                // move up
-                total = resultant + distance;
-                if (total < 100)
+                var fullCircles = distance / 100;
+                var rest = distance % 100;
+                zeroCrossings = fullCircles;
+                var newRawResultant = resultant + rest;
+                if (newRawResultant >= 100)
                 {
-                    return total;
+                    resultant = newRawResultant % 100;
+                    zeroCrossings++;
                 }
-                _zeroCrossings += (int)Math.Ceiling((total - 100) / 100d) + (total % 100 == 0 ? 1 : 0);
-                resultant = total % 100;
-                return resultant;
+                else
+                {
+                    resultant = newRawResultant;
+                }
             }
             else
             {
                 throw new ArgumentException("Direction should either be L or R");
             }
+            _zeroCrossings += zeroCrossings;
+            return resultant;
         }
 
         private class Result
