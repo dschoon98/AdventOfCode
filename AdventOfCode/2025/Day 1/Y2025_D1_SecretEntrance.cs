@@ -86,58 +86,32 @@ public class Y2025_D1_SecretEntrance : IChallenge
 
         public int Move(int resultant, char direction, int distance)
         {
-            int zeroCrossings;
-            if (direction == 'L')
+            var fullCircles = distance / 100;
+            var rest = (direction == 'R' ? +1 : -1) * distance % 100;
+            int zeroCrossings = fullCircles; // starting point, we know this for sure
+            var newRawResultant = resultant + rest; // before parsing
+            if (newRawResultant < 0)
             {
-                var fullCircles = distance / 100;
-                var rest = distance % 100;
-                zeroCrossings = fullCircles;
-                var newRawResultant = resultant - rest;
-                if (newRawResultant < 0)
-                {
-                    if (resultant != 0)
-                        zeroCrossings++;
-                    resultant = 100 - Math.Abs(newRawResultant);
-                }
-                else if (newRawResultant == 0)
-                {
+                if (resultant != 0) // we dont increment when the prev resultant is 0 because we have incremented in the loop before when we arrived at 0
                     zeroCrossings++;
-                    resultant = 0;
-                }
-                else
-                {
-                    resultant = newRawResultant;
-                }
+                resultant = 100 - Math.Abs(newRawResultant);
             }
-            else if (direction == 'R')
+            else if (newRawResultant == 0)
             {
-                var fullCircles = distance / 100;
-                var rest = distance % 100;
-                zeroCrossings = fullCircles;
-                var newRawResultant = resultant + rest;
-                if (newRawResultant >= 100)
-                {
-                    resultant = newRawResultant % 100;
-                    zeroCrossings++;
-                }
-                else
-                {
-                    resultant = newRawResultant;
-                }
+                zeroCrossings++;
+                resultant = 0;
+            }
+            else if (newRawResultant >= 100)
+            {
+                resultant = newRawResultant % 100;
+                zeroCrossings++;
             }
             else
             {
-                throw new ArgumentException("Direction should either be L or R");
+                resultant = newRawResultant;
             }
             _zeroCrossings += zeroCrossings;
             return resultant;
         }
-
-        private class Result
-        {
-            public int ZeroCrossings { get; init; }
-            public int Resultant { get; init; }
-        }
     }
-
 }
